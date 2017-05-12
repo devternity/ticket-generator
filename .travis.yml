@@ -1,31 +1,31 @@
 language: java
 jdk:
-  - oraclejdk8
+- oraclejdk8
 before_cache:
-  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
-  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+- rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+- rm -fr $HOME/.gradle/caches/*/plugin-resolution/
 cache:
-  - pip
-  - directories:
-     - $HOME/.gradle/caches/
-     - $HOME/.gradle/wrapper/
-script: ./gradlew -iS build -x test
+- pip
+- directories:
+  - "$HOME/.gradle/caches/"
+  - "$HOME/.gradle/wrapper/"
+script: "./gradlew -iS build -x test"
 env:
   global:
-    - secure: qSNqGoDEv5v+2Ki4GAzeVPXmtqV65pjZ9aD/VzG9kuUXsiKJ2roLr/bzjJ/EbiYRXSq5LPMSYQgt3p3aLuexMOQCOD3mz9emxSS/0nkomNXA5cDQb+bonxfW6uZdFWZ6szqD587rrQzSWxc07AM13CX/g1LBHU4cT6EAhXpHjror5a7qrcFWloHSZXcW4PtF4zLwW4P4RrsEKGdUcQRM0N2CV0PMtgWh/4BVI/pongyH5NOXNl7hhu5T1N5uZQjYOV5LCKHIBOhUAbPPX5bZ8PEhXLodWKZ9trP6F1K8GkS3I/II7t3HD2+Ao5P7B5IpgBV9i8tVDl2pnog3I7+65sUONOjbMA2aRfLW/YcT6ZEqdH46d+HdqTcVlO5s1IuD+nkBQ6EjUpr/3LtHj5DrN/oLv+wgZRplg9ZDgskRSb1EvUZyUsQ/I01wglmBnVdbfvgiUrl4tc4GT8ZTt1ON5rUBXYgiT9Tw4rlz9UZVJ/jAdeGjhYXkPJMTemsjrhSemPMrzocgmmq3YDvuMv/LCGKVZxZ/04jE3d5RN5Fh7qYaI/xGy3RGk4ASofIQLbUYVz/c3U/hAmZLomrE2zdCmxB1oi1JNmNUp+MBPr8Df/7UaL9eW/3tY6IZnu2ANaV3nV/52sg1nRWjVc2fSzWiNk2I1gGfWNMsRv9Z7jsG4sg=
+  - secure: 1CviflxrrxGYt3r6CfvFvjV8/bsJwJ68phKQ446TBKaLESyIiUGtjHaxoyFJT2DA27igdcPiyWTjy0dqgElUl5P0WA4LQMor+oANBMt0v3ahstS7e8y4QXjT+sYB9VjLlv1gpRFclGMnlqruhGv1lHvWyn0xxXzeonF8zX05S4OkIm2gwlVlJNW0O+hS2s/7mhH/aloEFCX2R5mnUAdo2AtC1QsBxIDf6+4KSMQnWFz53JdwV4257+SZ7fcW7M3pteWE9TWdMJTglA8AvgidKh6JPMRZ8gNpmL17svb0S0E3b2HE30CHF2eCpdSfgaTlCaZGpY/Q5jNOkdFr37Fm7IhrD2aC26dLmuBYiRo6LQ03U1m8f2vAITz2q2J8p+ElGuvYju9MZWyvOc8G0844cAgjjAeNv21Pg8JWLvghOmuIgrE5fpMHIeKecSIQ/UoA1V2n2kZZ3CQ1l1aGHF3FnEekk0P+ZFOZAfdH/c5xomUK7NRkxKlKiS/87geRV5ZaAvAes/+3kf4c9/54f0RicWBOZsnmXRvnOj2rZz7EGd/SSrrlv14irqxYFNLyTu7O9AUHWjSMRJZYdo33pAEqlgTTt/lEJA3ZUXq4APcdEaHNgWp+ItQdvpBDBHotW/heGTNblPOy2REk2dw0bDDlVW+Uxugl8Kd5cuobLYchUX8=
 deploy:
-  - provider: lambda
-    skip_cleanup: true
-    region: eu-west-1
-    function_name: devternity_ticket_generator
-    role: devternity_lambda_executor
-    handler_name: lv.latcraft.devternity.tickets.TicketGenerator::generate
-    memory_size: 1024
-    timeout: 300
-    runtime: java8
-    zip: build/distributions
-    on:
-      repo: devternity/ticket-generator
+- provider: lambda
+  skip_cleanup: true
+  region: eu-west-1
+  function_name: devternity_ticket_generator
+  role: devternity_lambda_executor
+  handler_name: lv.latcraft.devternity.tickets.TicketGenerator::generate
+  memory_size: 1024
+  timeout: 300
+  runtime: java8
+  zip: build/distributions
+  on:
+    repo: devternity/ticket-generator
 notifications:
   slack:
-    secure: JGVJuVx0A+GoqXGyobPC3ye++lZrOZtV7+c2qegQ+BdwfIrsUW9CIRg+Dq+hgPDDMUl2cU5KYtv5OEkklaMw4dQTLKyuD4FtT2aOCKbmgonYsawbD1dY8svuqhdzUpl+RpDTjh7OILAhGR1xGM7/7ogXwRiKqb+blu/mq/BjApckTm5HbIoCy4N41cMZhUzjzX5R+HIwn4Pajp1QKWiETXuIqtjEtkQosgtzD5mdo/tOKxQVCHnnvnVBwPF518JfQ4Qv49uUzYyErLn4IZ7/h8cPjR+usS61wmGGD04HVvBs98iAlPP11ncYprAEnd61m4q054oeesycKTy554maK56M9Lkgfii1HzT2abKZQx+MmzcJys8Fq97YR+frA+DS0LsTbYxXqZ6QPIkKDGC9tMl/BABXZkMQWfE2NAgEW3VhnPNGztEGTzZfCl9jVAVZ2biqbVmnjd9iAAfT0ZWycqzu5LkepfwOOBb3jSizsYPTxGVJBhhMHaNsa2WY5syDiM6hJbHSMNJ7bv1j3z3on0xC8qk+DL0rHK5d7XGawU24AvnQ6YgI+zQwIa3TomKKJdiE+iNVzibN8s8P5ULQYq/6dI1jKgzZAxbnKVwnUKOGod1kjLtb6aVKLwpWQUmJANEXo8TyqBivAoacAnHXEO4KMq9avQRA14KFnNErU1Q=
+    secure: dLLFxOFL3Lvb6BiTIM4UYxrrGSARmkq0eTxVyg+QTwLCed+s7vAINSihyCcKF0emthEbUsVHPI5HXYevhf93GTV045Xh/Kf46GXRDZXZeKDQkSbgAkfSVwjFdeQc2tSxk9OVNbQcDh78WkxFuZwS6riqi9pzHnKag/UjrnW0iWAhZwROq22ZTyq2H9TlRHnolJCwr8jRVbxaornetc27nJtGZMIB4S0H0khUfP8u3WNZ2J47jet2AVwR6A7EUYJ8MKyUs+PLrNc+adXfW0ZlREuo2XkKzlzQyvqlZTF+/naJ3/JPZRet2T3CgNiSuEBAtvnfgpHP71SCPvphq7CXLC6OgbfRCBgo4J7TgXICalfaQDH3tzqSFaNRalT/X/B04WgFlPh/8UJ6QDkFroATxgkW8aQkQo3L3apvO7+xAiE+tftTwANjEutYkgdz4CwKwBYTnSik+0FNK4qm6czlrnl9ob4eEOxq+kcXhLFZvtO8w5TVhZaO2SIq9S46mfBWnS+9+pfQe/XLL19PqnPrbDbpLuPS/bLy6sCTL3Va1exTLk3gVRBtmFMIkRMP2CaTgYw7aqLVnOotneIS4qIT7lxqs4KNELHGMRXrYgjhMMRiGQeUq+bSCwHncSgYD1+Ey2PT8rM3tWIiF86XWdompyiYKNzJgt8GpJd9cSGdAzA=
