@@ -4,7 +4,7 @@ provider "aws" {
 }
 
 variable "devternity_function_dist" {
-  default = "build/distributions/ticket-generator.zip"
+  default = "build/distributions/devternity-ticket-generator.zip"
 }
 
 resource "aws_s3_bucket" "devternity_images" {
@@ -111,7 +111,7 @@ resource "aws_lambda_permission" "devternity_ticket_generator_api_gatewaypermiss
   function_name           = "${aws_lambda_function.devternity_ticket_generator.arn}"
   qualifier               = "${aws_lambda_alias.devternity_ticket_generator_alias.name}"
   principal               = "apigateway.amazonaws.com"
-  source_arn              = "arn:aws:execute-api:${var.aws_region}:${var.aws_account_id}:${aws_api_gateway_rest_api.DevTernityAPI.id}/*/POST/ticket"
+  source_arn              = "arn:aws:execute-api:${var.aws_region}:${data.aws_caller_identity.current.account_id}:${aws_api_gateway_rest_api.DevTernityAPI.id}/*/POST/ticket"
 }
 
 
@@ -255,7 +255,7 @@ resource "aws_api_gateway_integration" "DevTernityAPITicketPOSTIntegration" {
   integration_http_method = "POST"
   type                    = "AWS"
   credentials             = "${aws_iam_role.devternity_api_executor.arn}"
-  uri                     = "arn:aws:apigateway:${var.aws_region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${var.aws_region}:${var.aws_account_id}:function:devternity_ticket_generator/invocations"
+  uri                     = "arn:aws:apigateway:${var.aws_region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${var.aws_region}:${data.aws_caller_identity.current.account_id}:function:devternity_ticket_generator/invocations"
 }
 
 resource "aws_api_gateway_method_response" "DevTernityAPITicketPOSTResponse" {

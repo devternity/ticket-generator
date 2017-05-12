@@ -1,8 +1,5 @@
 *.class
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
 # Package Files #
 *.jar
 *.war
@@ -20,13 +17,7 @@ out/
 *.ipr
 *.iws
 *.iml
-data.json
-all.csv
-replacements.csv
 gradle.properties
-local.properties
 *.backup
 *.tfstate
-vars.tf
-00_vars.tf
 *.json

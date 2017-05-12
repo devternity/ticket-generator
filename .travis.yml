@@ -1,0 +1,31 @@
+language: java
+jdk:
+  - oraclejdk8
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+cache:
+  - pip
+  - directories:
+     - $HOME/.gradle/caches/
+     - $HOME/.gradle/wrapper/
+script: ./gradlew build
+env:
+  global:
+    - secure: qSNqGoDEv5v+2Ki4GAzeVPXmtqV65pjZ9aD/VzG9kuUXsiKJ2roLr/bzjJ/EbiYRXSq5LPMSYQgt3p3aLuexMOQCOD3mz9emxSS/0nkomNXA5cDQb+bonxfW6uZdFWZ6szqD587rrQzSWxc07AM13CX/g1LBHU4cT6EAhXpHjror5a7qrcFWloHSZXcW4PtF4zLwW4P4RrsEKGdUcQRM0N2CV0PMtgWh/4BVI/pongyH5NOXNl7hhu5T1N5uZQjYOV5LCKHIBOhUAbPPX5bZ8PEhXLodWKZ9trP6F1K8GkS3I/II7t3HD2+Ao5P7B5IpgBV9i8tVDl2pnog3I7+65sUONOjbMA2aRfLW/YcT6ZEqdH46d+HdqTcVlO5s1IuD+nkBQ6EjUpr/3LtHj5DrN/oLv+wgZRplg9ZDgskRSb1EvUZyUsQ/I01wglmBnVdbfvgiUrl4tc4GT8ZTt1ON5rUBXYgiT9Tw4rlz9UZVJ/jAdeGjhYXkPJMTemsjrhSemPMrzocgmmq3YDvuMv/LCGKVZxZ/04jE3d5RN5Fh7qYaI/xGy3RGk4ASofIQLbUYVz/c3U/hAmZLomrE2zdCmxB1oi1JNmNUp+MBPr8Df/7UaL9eW/3tY6IZnu2ANaV3nV/52sg1nRWjVc2fSzWiNk2I1gGfWNMsRv9Z7jsG4sg=
+deploy:
+  - provider: lambda
+    skip_cleanup: true
+    region: eu-west-1
+    function_name: devternity_ticket_generator
+    role: devternity_lambda_executor
+    handler_name: lv.latcraft.devternity.tickets.TicketGenerator::generate
+    memory_size: 1024
+    timeout: 300
+    runtime: java8
+    zip: build/distributions
+    on:
+      repo: devternity/ticket-generator
+notifications:
+  slack:
+    secure: JGVJuVx0A+GoqXGyobPC3ye++lZrOZtV7+c2qegQ+BdwfIrsUW9CIRg+Dq+hgPDDMUl2cU5KYtv5OEkklaMw4dQTLKyuD4FtT2aOCKbmgonYsawbD1dY8svuqhdzUpl+RpDTjh7OILAhGR1xGM7/7ogXwRiKqb+blu/mq/BjApckTm5HbIoCy4N41cMZhUzjzX5R+HIwn4Pajp1QKWiETXuIqtjEtkQosgtzD5mdo/tOKxQVCHnnvnVBwPF518JfQ4Qv49uUzYyErLn4IZ7/h8cPjR+usS61wmGGD04HVvBs98iAlPP11ncYprAEnd61m4q054oeesycKTy554maK56M9Lkgfii1HzT2abKZQx+MmzcJys8Fq97YR+frA+DS0LsTbYxXqZ6QPIkKDGC9tMl/BABXZkMQWfE2NAgEW3VhnPNGztEGTzZfCl9jVAVZ2biqbVmnjd9iAAfT0ZWycqzu5LkepfwOOBb3jSizsYPTxGVJBhhMHaNsa2WY5syDiM6hJbHSMNJ7bv1j3z3on0xC8qk+DL0rHK5d7XGawU24AvnQ6YgI+zQwIa3TomKKJdiE+iNVzibN8s8P5ULQYq/6dI1jKgzZAxbnKVwnUKOGod1kjLtb6aVKLwpWQUmJANEXo8TyqBivAoacAnHXEO4KMq9avQRA14KFnNErU1Q=
