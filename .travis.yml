@@ -27,7 +27,7 @@ deploy:
   memory_size: 1024
   timeout: 300
   runtime: java8
-  zip: build/distributions
+  zip: build/distributions/ticket-generator.zip
   on:
     repo: devternity/ticket-generator
     branch: master
