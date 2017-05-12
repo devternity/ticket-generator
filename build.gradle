@@ -1,0 +1,55 @@
+
+import com.amazonaws.services.lambda.model.Runtime
+import jp.classmethod.aws.gradle.lambda.AWSLambdaMigrateFunctionTask
+
+plugins {
+  id 'groovy'
+  id 'idea'
+  id 'jp.classmethod.aws.lambda' version '0.28'
+}
+
+repositories {
+  mavenCentral()
+}
+
+aws {
+  region = "eu-west-1"
+}
+
+dependencies {
+  compile 'org.codehaus.groovy:groovy-all:2.4.5'
+  compile 'com.amazonaws:aws-lambda-java-core:1.1.0'
+  compile 'com.amazonaws:aws-lambda-java-events:1.1.0'
+  compile 'com.google.zxing:core:3.2.0'
+  compile 'com.google.zxing:javase:3.2.0'
+  compile 'org.apache.xmlgraphics:batik-transcoder:1.8'
+  compile 'org.apache.xmlgraphics:batik-codec:1.7'
+  compile 'org.apache.xmlgraphics:xmlgraphics-commons:2.1'
+  compile 'org.apache.xmlgraphics:fop:2.1'
+  compile 'log4j:log4j:1.2.17'
+  testCompile 'junit:junit:4.12'
+}
+
+task buildZip(type: Zip, dependsOn: classes) {
+  from compileGroovy
+  from processResources
+  into ('fonts') {
+    from file('fonts')
+  }
+  into('lib') {
+    from configurations.runtime
+  }           
+}
+
+build.dependsOn buildZip
+
+task deployFunction(type: AWSLambdaMigrateFunctionTask, dependsOn: buildZip) {
+  functionName        = "arn:aws:lambda:eu-west-1:${aws.accountId}:function:devternity_ticket_generator:\$LATEST"
+  role                = "arn:aws:iam::${aws.accountId}:role/devternity_lambda_executor"
+  functionDescription = 'DevTernity ticket generator'
+  handler             = "lv.latcraft.devternity.tickets.TicketGenerator::generate"
+  zipFile             = buildZip.archivePath
+  runtime             = Runtime.Java8
+  timeout             = 300
+  memorySize          = 512
+}
