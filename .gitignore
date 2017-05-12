@@ -20,4 +20,3 @@ out/
 gradle.properties
 *.backup
 *.tfstate
-*.json
