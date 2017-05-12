@@ -94,7 +94,7 @@ resource "aws_lambda_function" "devternity_ticket_generator" {
   role                    = "${aws_iam_role.devternity_lambda_executor.arn}"
   handler                 = "lv.latcraft.devternity.tickets.TicketGenerator::generate"
   runtime                 = "java8"
-  memory_size             = "512"
+  memory_size             = "1024"
   timeout                 = "300"
   source_code_hash        = "${base64sha256(file(var.devternity_function_dist))}"
 }
@@ -288,14 +288,38 @@ resource "aws_api_gateway_integration_response" "DevTernityAPITicketPOSTIntegrat
 resource "aws_api_gateway_api_key" "DevTernityAPIKey" {
   name                    = "devternity_api_key"
   description             = "Default DevTernity API key"
-  stage_key {
-    rest_api_id           = "${aws_api_gateway_rest_api.DevTernityAPI.id}"
-    stage_name            = "${aws_api_gateway_deployment.DevTernityAPIDeployment.stage_name}"
-  }
 }
 
 resource "aws_api_gateway_deployment" "DevTernityAPIDeployment" {
   rest_api_id             = "${aws_api_gateway_rest_api.DevTernityAPI.id}"
   stage_name              = "prod"
+  stage_description       = "${timestamp()}" // forces to 'create' a new deployment each run
 }
 
+resource "aws_api_gateway_usage_plan" "devternity_api_usage_plan" {
+
+  name         = "devternity-api-usage-plan"
+  description  = "DevTernity API Default Usage Plan"
+
+  api_stages {
+    api_id = "${aws_api_gateway_rest_api.DevTernityAPI.id}"
+    stage  = "${aws_api_gateway_deployment.DevTernityAPIDeployment.stage_name}"
+  }
+
+  quota_settings {
+    limit  = 200
+    period = "DAY"
+  }
+
+  throttle_settings {
+    burst_limit = 5
+    rate_limit  = 10
+  }
+
+}
+
+resource "aws_api_gateway_usage_plan_key" "main" {
+  key_id        = "${aws_api_gateway_api_key.DevTernityAPIKey.id}"
+  key_type      = "API_KEY"
+  usage_plan_id = "${aws_api_gateway_usage_plan.devternity_api_usage_plan.id}"
+}
