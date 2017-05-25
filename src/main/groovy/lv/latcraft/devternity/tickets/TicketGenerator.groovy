@@ -63,6 +63,8 @@ class TicketGenerator {
     GPathResult svg = new XmlSlurper().parseText(svgText)
     setElementValue(svg, 'ticket-name', sanitizeName(ticket.name).toUpperCase())
     setElementValue(svg, 'ticket-company', sanitizeCompany(ticket.company))
+    setElementValue(svg, 'ticket-when', ticket.when)
+    setElementValue(svg, 'ticket-what', ticket.what)
     setAttributeValue(svg, 'ticket-qr', 'xlink:href', "data:image/png;base64,${qrImage.encodeBase64().toString().toList().collate(76)*.join('').join(' ')}".toString())
     XmlUtil.serialize(svg)
   }

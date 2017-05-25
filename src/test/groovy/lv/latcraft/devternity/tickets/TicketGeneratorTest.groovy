@@ -12,14 +12,9 @@ class TicketGeneratorTest {
         println TicketGenerator.generate([
                 name    : 'Andrey Adamovich',
                 ticketId: 'RVUhC4YTTonZqj1earUh',
-                product : 'DT07_RIX_KNT',
-                company : 'Aestas/IT',
-                email   : 'andrey@aestasit.com',
-        ], context)
-        println TicketGenerator.generate([
-                name    : 'Andrey Adamovich',
-                ticketId: 'RVUhC4YTTonZqj1earUh',
-                product : 'DT07_RIX_WRK',
+                product : 'DT2017_RIX',
+                what    : 'Conference day',
+                when    : '1nd of December, 2017',
                 company : 'Aestas/IT',
                 email   : 'andrey@aestasit.com',
         ], context)

@@ -14,5 +14,7 @@ class TicketInfo {
   String company
   String product
   String ticketId
+  String when
+  String what
 
 }
