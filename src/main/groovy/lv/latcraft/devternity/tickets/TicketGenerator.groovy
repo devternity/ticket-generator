@@ -35,7 +35,7 @@ class TicketGenerator {
     svgFile.text = prepareSVG(getSvgTemplate(ticket.product), ticket, qrPngData)
     log.info "STEP 5: Pre-processed SVG template"
     File pdfFile = renderPDF(svgFile)
-    log.info "STEP 6: Generated PDF ticket"
+    log.info "STEP 6: Generated PDF ticket ($pdfFile)"
     s3.putObject(putRequest(ticket, pdfFile, 'pdf'))
     log.info "STEP 7: Uploaded PDF ticket"
     svgFile.delete()

@@ -4,5 +4,11 @@
         <font embed-url="fonts/arial.ttf">
             <font-triplet name="Arial" style="normal" weight="normal"/>
         </font>
+        <font embed-url="fonts/lato.ttf">
+            <font-triplet name="Lato" style="normal" weight="normal"/>
+        </font>
+        <font embed-url="fonts/latobd.ttf">
+            <font-triplet name="Lato" style="normal" weight="bold"/>
+        </font>
     </fonts>
 </pdf-renderer>
