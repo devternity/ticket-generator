@@ -13,8 +13,8 @@
    viewBox="0 0 744.09448 1052.3622"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.5 r10040"
-   sodipodi:docname="DEVTERNITY_TICKET_DT2017_RIX.svg">
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="DEVTERNITY_TICKET_DT_RIX_17.svg">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -28,8 +28,8 @@
      inkscape:window-height="851"
      id="namedview5687"
      showgrid="false"
-     inkscape:zoom="2.5371828"
-     inkscape:cx="630.30907"
+     inkscape:zoom="0.96"
+     inkscape:cx="573.15907"
      inkscape:cy="905.22122"
      inkscape:window-x="0"
      inkscape:window-y="1"
@@ -1632,9 +1632,9 @@
      id="text5693"
      y="93.030434"
      x="543.9104"
-     style="font-size:10px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Lato;-inkscape-font-specification:Lato Bold"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10px;line-height:125%;font-family:Lato;-inkscape-font-specification:'Lato Bold';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
      xml:space="preserve"><tspan
-       style="font-size:24px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:-0.5px;writing-mode:lr-tb;text-anchor:start;font-family:Lato;-inkscape-font-specification:Lato Bold"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.5px;line-height:125%;font-family:Lato;-inkscape-font-specification:'Lato Bold';text-align:start;letter-spacing:-0.5px;writing-mode:lr-tb;text-anchor:start"
        y="93.030434"
        x="543.9104"
        id="ticket-what"
