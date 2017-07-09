@@ -9,7 +9,7 @@ import org.apache.batik.transcoder.SVGAbstractTranscoder
 import org.apache.batik.transcoder.TranscoderException
 import org.apache.batik.transcoder.TranscoderInput
 import org.apache.batik.transcoder.TranscoderOutput
-import org.apache.batik.transcoder.image.PNGTranscoder
+import org.apache.batik.transcoder.image.JPEGTranscoder
 import org.apache.fop.svg.PDFTranscoder
 
 import static java.lang.Boolean.FALSE
@@ -26,11 +26,11 @@ class SvgMethods {
 
   private static final int DEFAULT_DPI = 300
 
-  static File renderPNG(File svgFile) {
-    PNGTranscoder t = new PNGTranscoder()
+  static File renderJPG(File svgFile) {
+    JPEGTranscoder t = new JPEGTranscoder()
     configureFonts(t)
     String svgURI = svgFile.toURI().toString()
-    File pdfFile = temporaryFile('temporary', '.png')
+    File pdfFile = temporaryFile('temporary', '.jpg')
     try {
       t.transcode(
         new TranscoderInput(svgURI),

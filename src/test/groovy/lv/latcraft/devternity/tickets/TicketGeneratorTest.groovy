@@ -16,7 +16,8 @@ class TicketGeneratorTest {
                 what    : 'Conference day',
                 when    : '1nd of December, 2017',
                 company : 'Aestas/IT',
-                email   : 'andrey@aestasit.com'
+                email   : 'andrey@aestasit.com',
+                webhook : 'https://requestb.in/r38ozdr3'
         ], context)
     }
 
