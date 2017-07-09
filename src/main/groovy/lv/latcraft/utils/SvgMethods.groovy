@@ -49,7 +49,6 @@ class SvgMethods {
       log.debug(e?.exception?.cause)
       throw e
     }
-    throw new RuntimeException(pngFile.absolutePath);
     pngFile
 
   }
