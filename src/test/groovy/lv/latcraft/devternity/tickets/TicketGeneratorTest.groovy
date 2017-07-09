@@ -16,7 +16,7 @@ class TicketGeneratorTest {
                 what    : 'Conference day',
                 when    : '1nd of December, 2017',
                 company : 'Aestas/IT',
-                email   : 'andrey@aestasit.com',
+                email   : 'andrey@aestasit.com'
         ], context)
     }
 

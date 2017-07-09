@@ -9,6 +9,7 @@ import groovy.transform.TypeChecked
 @Canonical
 class TicketInfo {
 
+  String webhook
   String email
   String name
   String company

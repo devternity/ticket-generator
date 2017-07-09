@@ -44,12 +44,20 @@ class TicketGenerator {
     s3.putObject(putRequest(ticket, pngFile, 'png'))
     log.info "STEP 9: Uploaded PNG preview"
     svgFile.delete()
-    [
+    def response = [
       status: 'OK',
       qr    : "https://s3-eu-west-1.amazonaws.com/${BUCKET_NAME}/ticket-${ticket.ticketId}.png".toString(),
       pdf   : "https://s3-eu-west-1.amazonaws.com/${BUCKET_NAME}/ticket-${ticket.ticketId}.pdf".toString(),
       png   : "https://s3-eu-west-1.amazonaws.com/${BUCKET_NAME}/ticket-${ticket.ticketId}.png".toString()
     ]
+
+    if (ticket.webhook) {
+      def webHook = new WebHook(url: ticket.webhook)
+      def status = webHook.trigger(response + [data: data])
+      log.info "STEP 10: Webhook ($webHook.url) responded with ($status)"
+    }
+
+    response
   }
 
   static PutObjectRequest putRequest(TicketInfo ticket, File file, String extension) {
