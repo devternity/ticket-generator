@@ -9,8 +9,9 @@ import org.apache.batik.transcoder.SVGAbstractTranscoder
 import org.apache.batik.transcoder.TranscoderException
 import org.apache.batik.transcoder.TranscoderInput
 import org.apache.batik.transcoder.TranscoderOutput
-import org.apache.batik.transcoder.image.JPEGTranscoder
+import org.apache.batik.transcoder.image.PNGTranscoder
 import org.apache.fop.svg.PDFTranscoder
+import java.awt.Color
 
 import static java.lang.Boolean.FALSE
 import static java.nio.charset.StandardCharsets.UTF_8
@@ -18,6 +19,8 @@ import static lv.latcraft.utils.FileMethods.temporaryFile
 import static lv.latcraft.utils.LambdaMethods.insideLambda
 import static org.apache.batik.transcoder.SVGAbstractTranscoder.KEY_PIXEL_UNIT_TO_MILLIMETER
 import static org.apache.batik.transcoder.XMLAbstractTranscoder.KEY_XML_PARSER_VALIDATING
+import static org.apache.batik.transcoder.image.ImageTranscoder.KEY_FORCE_TRANSPARENT_WHITE
+import static org.apache.batik.transcoder.image.ImageTranscoder.KEY_BACKGROUND_COLOR
 import static org.apache.fop.svg.AbstractFOPTranscoder.KEY_AUTO_FONTS
 import static org.apache.fop.svg.AbstractFOPTranscoder.KEY_STROKE_TEXT
 
@@ -26,16 +29,17 @@ class SvgMethods {
 
   private static final int DEFAULT_DPI = 300
 
-  static File renderJPG(File svgFile) {
-    JPEGTranscoder t = new JPEGTranscoder()
+  static File renderPNG(File svgFile) {
+    def t = new PNGTranscoder()
+    t.addTranscodingHint(KEY_BACKGROUND_COLOR, Color.WHITE)
     configureFonts(t)
     String svgURI = svgFile.toURI().toString()
-    File pdfFile = temporaryFile('temporary', '.jpg')
+    File pngFile = temporaryFile('temporary', '.png')
     try {
       t.transcode(
         new TranscoderInput(svgURI),
         new TranscoderOutput(
-          new FileOutputStream(pdfFile)
+          new FileOutputStream(pngFile)
         )
       )
     } catch (TranscoderException e) {
@@ -45,11 +49,13 @@ class SvgMethods {
       log.debug(e?.exception?.cause)
       throw e
     }
-    pdfFile
+    throw new RuntimeException(pngFile.absolutePath);
+    pngFile
+
   }
 
   static File renderPDF(File svgFile) {
-    PDFTranscoder t = new PDFTranscoder()
+    def t = new PDFTranscoder()
     configureFonts(t)
     String svgURI = svgFile.toURI().toString()
     File pdfFile = temporaryFile('temporary', '.pdf')

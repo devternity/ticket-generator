@@ -13,7 +13,7 @@ import static lv.latcraft.utils.S3Methods.s3
 import static lv.latcraft.utils.SanitizationMethods.sanitizeCompany
 import static lv.latcraft.utils.SanitizationMethods.sanitizeName
 import static lv.latcraft.utils.SvgMethods.renderPDF
-import static lv.latcraft.utils.SvgMethods.renderJPG
+import static lv.latcraft.utils.SvgMethods.renderPNG
 import static lv.latcraft.utils.XmlMethods.setAttributeValue
 import static lv.latcraft.utils.XmlMethods.setElementValue
 
@@ -31,24 +31,24 @@ class TicketGenerator {
     File qrFile = temporaryFile('ticket-qr', '.png')
     qrFile.bytes = qrPngData
     log.info "STEP 3: Saved QR image"
-    s3.putObject(putRequest(ticket, qrFile, 'png'))
+    // s3.putObject(putRequest(ticket, qrFile, 'png'))
     log.info "STEP 4: Uploaded PDF ticket"
     svgFile.text = prepareSVG(getSvgTemplate(ticket.product), ticket, qrPngData)
     log.info "STEP 5: Pre-processed SVG template"
     File pdfFile = renderPDF(svgFile)
     log.info "STEP 6: Generated PDF ticket ($pdfFile)"
-    s3.putObject(putRequest(ticket, pdfFile, 'pdf'))
+    // s3.putObject(putRequest(ticket, pdfFile, 'pdf'))
     log.info "STEP 7: Uploaded PDF ticket"
-    File jpgFile = renderJPG(svgFile)
-    log.info "STEP 8: Generated JPG preview ($jpgFile)"
-    s3.putObject(putRequest(ticket, jpgFile, 'jpg'))
-    log.info "STEP 9: Uploaded JPG preview"
+    File pngFile = renderPNG(svgFile)
+    log.info "STEP 8: Generated PNG preview ($pngFile)"
+    // s3.putObject(putRequest(ticket, pngFile, 'png'))
+    log.info "STEP 9: Uploaded PNG preview"
     svgFile.delete()
     def response = [
       status: 'OK',
       qr    : "https://s3-eu-west-1.amazonaws.com/${BUCKET_NAME}/ticket-${ticket.ticketId}.png".toString(),
       pdf   : "https://s3-eu-west-1.amazonaws.com/${BUCKET_NAME}/ticket-${ticket.ticketId}.pdf".toString(),
-      jpg   : "https://s3-eu-west-1.amazonaws.com/${BUCKET_NAME}/ticket-${ticket.ticketId}.jpg".toString()
+      png   : "https://s3-eu-west-1.amazonaws.com/${BUCKET_NAME}/ticket-${ticket.ticketId}.png".toString()
     ]
 
     if (ticket.webhook) {
