@@ -5,9 +5,11 @@ import groovy.xml.XmlUtil
 import org.apache.avalon.framework.configuration.Configuration
 import org.apache.avalon.framework.configuration.DefaultConfigurationBuilder
 import org.apache.avalon.framework.container.ContainerUtil
+import org.apache.batik.transcoder.SVGAbstractTranscoder
 import org.apache.batik.transcoder.TranscoderException
 import org.apache.batik.transcoder.TranscoderInput
 import org.apache.batik.transcoder.TranscoderOutput
+import org.apache.batik.transcoder.image.PNGTranscoder
 import org.apache.fop.svg.PDFTranscoder
 
 import static java.lang.Boolean.FALSE
@@ -23,6 +25,28 @@ import static org.apache.fop.svg.AbstractFOPTranscoder.KEY_STROKE_TEXT
 class SvgMethods {
 
   private static final int DEFAULT_DPI = 300
+
+  static File renderPNG(File svgFile) {
+    PNGTranscoder t = new PNGTranscoder()
+    configureFonts(t)
+    String svgURI = svgFile.toURI().toString()
+    File pdfFile = temporaryFile('temporary', '.png')
+    try {
+      t.transcode(
+        new TranscoderInput(svgURI),
+        new TranscoderOutput(
+          new FileOutputStream(pdfFile)
+        )
+      )
+    } catch (TranscoderException e) {
+      // Let's be very verbose about error logging, since it's very hard to debug FOP exceptions.
+      log.debug(e)
+      log.debug(e?.exception)
+      log.debug(e?.exception?.cause)
+      throw e
+    }
+    pdfFile
+  }
 
   static File renderPDF(File svgFile) {
     PDFTranscoder t = new PDFTranscoder()
@@ -46,7 +70,7 @@ class SvgMethods {
     pdfFile
   }
 
-  private static void configureFonts(PDFTranscoder t) {
+  private static void configureFonts(SVGAbstractTranscoder t) {
     DefaultConfigurationBuilder cfgBuilder = new DefaultConfigurationBuilder()
     Configuration cfg = cfgBuilder.build(rendererConfiguration)
     ContainerUtil.configure(t, cfg)
