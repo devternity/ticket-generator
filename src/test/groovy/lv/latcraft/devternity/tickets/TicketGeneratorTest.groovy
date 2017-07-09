@@ -12,7 +12,7 @@ class TicketGeneratorTest {
         println TicketGenerator.generate([
                 name    : 'Andrey Adamovich',
                 ticketId: 'RVUhC4YTTonZqj1earUh',
-                product : 'DT2017_RIX',
+                product : 'DT_RIX_17',
                 what    : 'Conference day',
                 when    : '1nd of December, 2017',
                 company : 'Aestas/IT',
