@@ -31,17 +31,17 @@ class TicketGenerator {
     File qrFile = temporaryFile('ticket-qr', '.png')
     qrFile.bytes = qrPngData
     log.info "STEP 3: Saved QR image"
-    // s3.putObject(putRequest(ticket, qrFile, 'png'))
+    s3.putObject(putRequest(ticket, qrFile, 'png'))
     log.info "STEP 4: Uploaded PDF ticket"
     svgFile.text = prepareSVG(getSvgTemplate(ticket.product), ticket, qrPngData)
     log.info "STEP 5: Pre-processed SVG template"
     File pdfFile = renderPDF(svgFile)
     log.info "STEP 6: Generated PDF ticket ($pdfFile)"
-    // s3.putObject(putRequest(ticket, pdfFile, 'pdf'))
+    s3.putObject(putRequest(ticket, pdfFile, 'pdf'))
     log.info "STEP 7: Uploaded PDF ticket"
     File pngFile = renderPNG(svgFile)
     log.info "STEP 8: Generated PNG preview ($pngFile)"
-    // s3.putObject(putRequest(ticket, pngFile, 'png'))
+    s3.putObject(putRequest(ticket, pngFile, 'png'))
     log.info "STEP 9: Uploaded PNG preview"
     svgFile.delete()
     def response = [
