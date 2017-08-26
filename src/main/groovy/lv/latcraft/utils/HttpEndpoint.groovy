@@ -5,7 +5,7 @@ import com.mashape.unirest.http.Unirest
 import groovy.transform.Canonical
 
 @Canonical
-class Webhook {
+class HttpEndpoint {
 
   {
     Unirest.objectMapper = new ObjectMapper() {
@@ -23,7 +23,7 @@ class Webhook {
 
   String url
 
-  def trigger(body) {
+  def post(body) {
     def response = Unirest.post(url)
     .header("Content-Type", "application/json")
     .body(body)
