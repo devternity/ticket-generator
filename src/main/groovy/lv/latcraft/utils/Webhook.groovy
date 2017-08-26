@@ -1,13 +1,11 @@
-package lv.latcraft.devternity.tickets
+package lv.latcraft.utils
 
-import groovy.transform.Canonical
-import groovy.transform.CompileStatic
-import groovy.transform.TypeChecked
 import com.mashape.unirest.http.ObjectMapper
 import com.mashape.unirest.http.Unirest
+import groovy.transform.Canonical
 
 @Canonical
-class WebHook {
+class Webhook {
 
   {
     Unirest.objectMapper = new ObjectMapper() {
