@@ -4,7 +4,7 @@ provider "aws" {
 }
 
 variable "devternity_function_dist" {
-  default = "build/distributions/devternity-ticket-generator.zip"
+  default = "build/distributions/ticket-generator.zip"
 }
 
 resource "aws_s3_bucket" "devternity_images" {
@@ -12,6 +12,46 @@ resource "aws_s3_bucket" "devternity_images" {
   acl                     = "private"
 }
 
+resource "aws_iam_user" "devternity_s3_user" {
+  name = "devternity_s3_user"
+}
+
+resource "aws_iam_access_key" "devternity_s3_user_key" {
+  user = "${aws_iam_user.devternity_s3_user.name}"
+}
+
+resource "aws_iam_user_policy" "devternity_s3_user_policy" {
+  name = "devternity_s3_user_policy"
+  user = "${aws_iam_user.devternity_s3_user.name}"
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:ListBucket"
+      ],
+      "Resource": [
+        "${aws_s3_bucket.devternity_images.arn}"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:PutObject",
+        "s3:PutObjectAcl",
+        "s3:GetObject",
+        "s3:GetObjectAcl"
+      ],
+      "Resource": [
+        "${aws_s3_bucket.devternity_images.arn}/*"
+      ]
+    }
+  ]
+}
+EOF
+}
 
 //    _                 _         _
 //   | |               | |       | |
