@@ -61,7 +61,8 @@ class TicketGenerator {
         def firebase = new HttpEndpoint(url: "https://${FIREBASE_DB}.firebaseio.com/${FIREBASE_COLLECTION}")
         def firebaseStatus = firebase.post([
                 ticketId: ticket.ticketId,
-                holder  : ticket.name
+                holder  : ticket.name,
+                email   : ticket.email
         ])
         log.info "STEP 10: Firebase write responded with ($firebaseStatus)"
 
