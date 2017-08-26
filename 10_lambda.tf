@@ -13,6 +13,19 @@ resource "aws_s3_bucket" "devternity_code" {
   acl                     = "private"
 }
 
+resource "aws_iam_user" "devternity_deployer" {
+  name = "devternity_deployer"
+}
+
+resource "aws_iam_access_key" "devternity_deployer_key" {
+  user = "${aws_iam_user.devternity_deployer.name}"
+}
+
+resource "aws_iam_user_policy_attachment" "devternity_deployer_policy_attachment" {
+  user       = "${aws_iam_user.devternity_deployer.name}"
+  policy_arn = "arn:aws:iam::aws:policy/AWSLambdaFullAccess"
+}
+
 resource "aws_iam_user" "devternity_s3_user" {
   name = "devternity_s3_user"
 }
