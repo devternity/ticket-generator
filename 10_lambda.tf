@@ -3,12 +3,13 @@ provider "aws" {
   region                  = "${var.aws_region}"
 }
 
-variable "devternity_function_dist" {
-  default = "build/distributions/ticket-generator.zip"
-}
-
 resource "aws_s3_bucket" "devternity_images" {
   bucket                  = "devternity-images"
+  acl                     = "private"
+}
+
+resource "aws_s3_bucket" "devternity_code" {
+  bucket                  = "devternity-code"
   acl                     = "private"
 }
 
@@ -33,7 +34,8 @@ resource "aws_iam_user_policy" "devternity_s3_user_policy" {
         "s3:ListBucket"
       ],
       "Resource": [
-        "${aws_s3_bucket.devternity_images.arn}"
+        "${aws_s3_bucket.devternity_images.arn}",
+        "${aws_s3_bucket.devternity_code.arn}"
       ]
     },
     {
@@ -45,7 +47,8 @@ resource "aws_iam_user_policy" "devternity_s3_user_policy" {
         "s3:GetObjectAcl"
       ],
       "Resource": [
-        "${aws_s3_bucket.devternity_images.arn}/*"
+        "${aws_s3_bucket.devternity_images.arn}/*",
+        "${aws_s3_bucket.devternity_code.arn}/*"
       ]
     }
   ]
@@ -110,7 +113,10 @@ resource "aws_iam_role_policy" "devternity_lambda_executor_policy" {
     {
       "Effect": "Allow",
       "Action": ["s3:ListBucket"],
-      "Resource": ["${aws_s3_bucket.devternity_images.arn}"]
+      "Resource": [
+        "${aws_s3_bucket.devternity_images.arn}",
+        "${aws_s3_bucket.devternity_code.arn}"
+      ]
     },
     {
       "Effect": "Allow",
@@ -120,7 +126,10 @@ resource "aws_iam_role_policy" "devternity_lambda_executor_policy" {
         "s3:GetObject",
         "s3:GetObjectAcl"
       ],
-      "Resource": ["${aws_s3_bucket.devternity_images.arn}/*"]
+      "Resource": [
+        "${aws_s3_bucket.devternity_images.arn}/*",
+        "${aws_s3_bucket.devternity_code.arn}/*"
+      ]
     }
   ]
 }
@@ -128,7 +137,8 @@ EOF
 }
 
 resource "aws_lambda_function" "devternity_ticket_generator" {
-  filename                = "${var.devternity_function_dist}"
+  s3_bucket               = "${aws_s3_bucket.devternity_code.bucket}"
+  s3_key                  = "ticket-generator.zip"
   function_name           = "devternity_ticket_generator"
   description             = "DevTernity ticket generator"
   role                    = "${aws_iam_role.devternity_lambda_executor.arn}"
@@ -136,7 +146,6 @@ resource "aws_lambda_function" "devternity_ticket_generator" {
   runtime                 = "java8"
   memory_size             = "1024"
   timeout                 = "300"
-  source_code_hash        = "${base64sha256(file(var.devternity_function_dist))}"
 }
 
 resource "aws_lambda_alias" "devternity_ticket_generator_alias" {
