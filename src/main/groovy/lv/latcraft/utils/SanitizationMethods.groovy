@@ -7,6 +7,13 @@ import groovy.transform.TypeChecked
 @TypeChecked
 class SanitizationMethods {
 
+  static final String LV_CHARS = 'āēūīķņčžš'
+  static final String TR_CHARS = 'aeuiknczs'
+
+  static String transliterateLatvianLetters(String name) {
+    name?.toString()?.tr(LV_CHARS, TR_CHARS)
+  }
+
   static String sanitizeName(String name) {
     name.
       trim().
