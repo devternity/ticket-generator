@@ -7,15 +7,12 @@ import groovy.util.logging.Commons
 import groovy.util.slurpersupport.GPathResult
 import groovy.xml.XmlUtil
 import lv.latcraft.utils.HttpEndpoint
-import lv.latcraft.utils.SanitizationMethods
 
 import static lv.latcraft.utils.FileMethods.temporaryFile
 import static lv.latcraft.utils.QRMethods.renderQRCodePNGImage
 import static lv.latcraft.utils.S3Methods.anyoneWithTheLink
 import static lv.latcraft.utils.S3Methods.s3
-import static lv.latcraft.utils.SanitizationMethods.sanitizeCompany
-import static lv.latcraft.utils.SanitizationMethods.sanitizeName
-import static lv.latcraft.utils.SanitizationMethods.transliterateLatvianLetters
+import static lv.latcraft.utils.SanitizationMethods.*
 import static lv.latcraft.utils.SvgMethods.renderPDF
 import static lv.latcraft.utils.SvgMethods.renderPNG
 import static lv.latcraft.utils.XmlMethods.setAttributeValue
@@ -80,7 +77,7 @@ class TicketGenerator {
 
   static PutObjectRequest putRequest(TicketInfo ticket, File file, String extension) {
     def metadata = new ObjectMetadata()
-    metadata.addUserMetadata "name", transliterateLatvianLetters(ticket.name)
+    metadata.addUserMetadata "name", stripAccents(ticket.name)
 
     new PutObjectRequest(
         BUCKET_NAME,
